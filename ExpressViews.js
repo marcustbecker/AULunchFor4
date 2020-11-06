@@ -12,12 +12,25 @@ var con = mysql.createConnection({
     database: "PWW_F202"
 });
 
+con.connect(function(err) {
+    if (err) throw err;
+    console.log('Database is connected successfully!');
+});
+
+app.get('/home', function(req, res, next) {
+    var sql='SELECT * FROM Users';
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('home', {userData: data});
+    });
+});
+
 
 app.use(express.static('public'));
 
-app.get('/home', function(req, res){
-    res.render('home')
-});
+//app.get('/home', function(req, res){
+//    res.render('home')
+//});
 
 app.get('/login', function(req, res){
     res.render('login')
