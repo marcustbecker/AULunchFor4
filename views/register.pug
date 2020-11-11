@@ -5,17 +5,29 @@ html
         h1 Register
         hr
 
-        form(action="")
-            label Email
+        form(action="submit", method="post")
+            label First Name: 
+            input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" required)
+            br
+
+            label Last Name: 
+            input(type="text" placeholder="Enter Last Name" name="lastN" id="lastN" required)
+            br
+
+            label Username: 
+            input(type="text" placeholder="Enter Username" name="userLogin" id="userLogin" required)
+            br
+
+            label Email: 
             input(type="text" placeholder="Enter Email" name="email" id="email" required)
             br
 
-            label Password
-            input(type='password' placeholder='Enter Password' required)
+            label Password: 
+            input(type='password' placeholder='Enter Password' name="userPassw" id="userPassw" required)
             br
 
-            label(for="psw-repeat") Confirm Password
+            label(for="psw-repeat") Confirm Password: 
             input(type="password" placeholder="Repeat Password" required)
             br
             
-            input(type='submit')
+            button(type='submit') Create User
