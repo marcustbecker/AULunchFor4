@@ -39,10 +39,7 @@ app.post('/submit', function(req,res){
         console.log(res);
     });
 });*/
-con.connect(function(err) {
-    if (err) throw err;
-    console.log('Database is connected successfully!');
-});
+
 
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
