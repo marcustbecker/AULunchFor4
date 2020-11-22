@@ -18,6 +18,15 @@ var con = mysql.createConnection({
     database: "PWW_F202"
 });
 
+/* --- Session for user login --- */ 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
 con.connect(function(err) {
     if (err) throw err;
     console.log('Database is connected successfully!');
@@ -38,7 +47,7 @@ app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
 
     if(req.session.leggedin) {
-        response.send('Welcome back, ' + req.session.email);
+        response.send('Welcome back, ' + req.session.username);
     } else {
         response.send('Please login to view this page!');
     }
@@ -51,26 +60,30 @@ app.get('/home', function(req, res, next) {
 
 // Login authentication 
 app.post('/login', function(req, res) {
-    var email = req.body.email;
+    var username = req.body.username;
     var password = req.body.password;
-    var sql = "'SELECT * FROM Users WHERE userLogin = ? AND userPassw = ?', [email, password]"
+    var sql = 'SELECT * FROM Users WHERE userLogin = ? AND userPassw = ?'
+    console.log("--- INSIDE /LOGIN POST ---")
 
-    if (email && password) {
-        con.query(sql, function(err, data, fields) {
+    // Checks if form was filled out
+    if (username && password) {
+        //Checks if input matches database
+        con.query(sql, [username, password], function(err, data, fields) {
             if (data.length > 0) {
                 req.session.loggedin = true;
-                req.session.username = email;
-                res.redirect('/home');
+                req.session.username = username;
+                res.redirect('/preferences');
             } else {
-                res.send("Incorrect Email and/or Password");
+                res.send("Incorrect Username and/or Password");
             }
             res.end();
         });
     } else {
-        res.send('Please enter Email and Password!');
+        res.send('Please enter Username and Password!');
         res.end();
     }
 });
+
 
 
 app.use(express.static('public'));
