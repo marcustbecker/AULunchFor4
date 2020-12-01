@@ -15,12 +15,11 @@ var con = mysql.createConnection({
     password: "csc4350Time",
     database: "PWW_F202"
 });
-con.connect(function(err){
+
+con.connect(function(err) {
     if (err) throw err;
-
-    console.log('Connected!');
+    console.log('Database is connected successfully!');
 });
-
 
 app.post('/submit', function(req,res){
     console.log(req.body);
@@ -32,14 +31,6 @@ app.post('/submit', function(req,res){
 
     })
 });
-/*con.connect( function(err){
-    if (err) throw err;
-    con.query("select * from Users", function(err2, res, fields){
-        if (err) throw err;
-        console.log(res);
-    });
-});*/
-
 
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
@@ -51,10 +42,6 @@ app.get('/home', function(req, res, next) {
 
 
 app.use(express.static('public'));
-
-//app.get('/home', function(req, res){
-//    res.render('home')
-//});
 
 app.get('/login', function(req, res){
     res.render('login')
