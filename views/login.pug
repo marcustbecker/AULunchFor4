@@ -1,8 +1,10 @@
-html
-    head
-        title Login
-    body
-        h1 Login
+extends layout.pug
+append head
+    title Login
+append content
+    div(class='container')
+        div(class='heading')
+            h1 Login
         form(action="" method="post")
             label Email
             input(placeholder="Enter Email" name="email" id="email" required)
