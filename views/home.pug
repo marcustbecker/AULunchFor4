@@ -1,11 +1,14 @@
-html
-    head
-        title Home
-    body
-        h1 Home Page
+extends layout.pug
+append head
+    title Home
+    
+append content
+    div(class='container')
+        div(class='heading')
+            h1 Home Page
 
         label Group Info:
-        table(border='1px solid black')
+        table(id='members')
             tr 
                 th Name
                 th Email
@@ -16,4 +19,4 @@ html
                     td= val.email
                     td member
         br
-        button Meeting info
+        button(class='btn-blue') Meeting info
