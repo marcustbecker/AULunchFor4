@@ -7,7 +7,7 @@ append content
             h1 Register
         hr
 
-        form(action="submit", method="post")
+        form(action="submit" method="post")
             label First Name: 
             input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" required)
             br
@@ -31,5 +31,8 @@ append content
             label(for="psw-repeat") Confirm Password: 
             input(type="password" placeholder="Repeat Password" required)
             br
-            
+
             button(type='submit') Create User
+
+        div Go Back to Login
+        a(href="login") Login

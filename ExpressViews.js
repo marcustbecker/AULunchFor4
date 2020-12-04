@@ -43,20 +43,31 @@ app.post('/submit', function(req,res){
     })
 });
 
+app.post('/submitDep', function(req,res){
+    console.log(req.body)
+    
+    var sql = "Insert into Departments (id,depName,depDes) VALUES(null, '"+ req.body.depName + "', '" + parseInt(req.body.depDes) + "')";
+    con.query(sql, function (err){
+        if(err) throw err
+        res.render('addDepartment' ,{title: 'Data Saved', message: 'Department Created'});
+    })
+})
+
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
 
-    if(req.session.leggedin) {
+   /* if(req.session.leggedin) {
         response.send('Welcome back, ' + req.session.username);
     } else {
         response.send('Please login to view this page!');
-    }
+    }*/
     
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('home', {userData: data});
     });
 });
+
 
 // Login authentication 
 app.post('/login', function(req, res) {
@@ -99,5 +110,18 @@ app.get('/register', function(req, res){
 app.get('/preferences', function(req, res){
     res.render('preferences')
 });
+
+app.get('/departments', function(req, res, next){
+    var sql = 'SELECT * FROM Departments';
+    con.query(sql, function(err,data, fields){
+        if(err) throw err;
+        res.render('departments',{departmentData:data})
+    })
+});
+
+app.get('/addDepartment', function(req, res){
+    res.render('addDepartment')
+});
+
 
 app.listen(3000);

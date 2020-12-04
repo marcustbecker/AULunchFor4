@@ -1,0 +1,19 @@
+html
+    head
+        title Add Department
+    body
+        h1 Add departments 
+        hr
+
+        form(action = "submitDep" , method = "post")
+            label Department Name
+            input(type="text" placeholder="Enter Department Name" name="depName" id="depName" required)
+            br
+
+            label Department Des
+            input(type="text" placeholder="Enter Department Des" name="depDes" id="depDes" required)
+            br
+
+            button(type='submit') Add Department
+
+    

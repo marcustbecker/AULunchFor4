@@ -1,0 +1,27 @@
+
+html
+    head
+        title Departments
+    body
+        h1 Departments
+
+
+        table(border='1px solid black')
+            tr
+                th ID
+                th Department Name
+                th Department Densitiy
+            each val in departmentData
+                tr
+                    td= val.id
+                    td= val.depName
+                    td= depDes
+
+        br
+
+        button  
+            a(href="addDepartments") Add a Department
+        br
+        br
+        button  
+            a(href="home") Go to Home
