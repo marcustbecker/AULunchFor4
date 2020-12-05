@@ -6,7 +6,7 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
 app.set( 'view engine', 'pug');
 app.set('views', './views');
-
+var exec = require("child_process").exec;
 var mysql = require("mysql");
 const { parse } = require('path');
 const { response } = require('express');
@@ -124,18 +124,11 @@ app.get('/addDepartment', function(req, res){
 });
 
 app.get('/deleteUser', function(req, res){
-    res.render('deleteUser')
+    exec("php deleteUser.php", function (error, stdout,stderr) {res.send(stdout);});
 });
 
 app.get('/admin', function(req, res, next) {
     var sql='SELECT * FROM Users';
-
-   /* if(req.session.leggedin) {
-        response.send('Welcome back, ' + req.session.username);
-    } else {
-        response.send('Please login to view this page!');
-    }*/
-    
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('admin', {userData: data});

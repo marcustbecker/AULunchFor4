@@ -9,7 +9,7 @@ append content
 
         form(action="submit" method="post")
             label First Name: 
-            input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" required)
+            input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" pattern="[A-Za-z]{45}" required)
             br
 
             label Last Name: 
