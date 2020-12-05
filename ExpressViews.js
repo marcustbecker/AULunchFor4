@@ -123,5 +123,24 @@ app.get('/addDepartment', function(req, res){
     res.render('addDepartment')
 });
 
+app.get('/deleteUser', function(req, res){
+    res.render('deleteUser')
+});
+
+app.get('/admin', function(req, res, next) {
+    var sql='SELECT * FROM Users';
+
+   /* if(req.session.leggedin) {
+        response.send('Welcome back, ' + req.session.username);
+    } else {
+        response.send('Please login to view this page!');
+    }*/
+    
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('admin', {userData: data});
+    });
+});
+
 
 app.listen(3000);
