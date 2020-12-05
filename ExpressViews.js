@@ -39,19 +39,21 @@ app.post('/submit', function(req,res){
         if (err) throw err
         res.render('register', {title: 'Data Saved',
         message: 'The user was created successfully!'})
-
+        
     })
 });
 
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
 
-    if(req.session.leggedin) {
+    /*
+    if(req.session.loggedin) {
         response.send('Welcome back, ' + req.session.username);
     } else {
         response.send('Please login to view this page!');
     }
-    
+    */
+
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('home', {userData: data});
@@ -72,7 +74,13 @@ app.post('/login', function(req, res) {
             if (data.length > 0) {
                 req.session.loggedin = true;
                 req.session.username = username;
-                res.redirect('/preferences');
+                //this line needs to change to preferences
+                console.log(data[0].pref)
+                if (data[0].pref == undefined){
+                    res.redirect('/preferences');
+                } else {
+                    res.redirect('/home')
+                }
             } else {
                 res.send("Incorrect Username and/or Password");
             }
