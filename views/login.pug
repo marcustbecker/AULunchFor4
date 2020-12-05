@@ -5,13 +5,13 @@ append content
     div(class='container')
         div(class='heading')
             h1 Login
-        form(action="" method="post")
-            label Email
-            input(placeholder="Enter Email" name="email" id="email" required)
+        form(action="login" method="post")
+            label Username
+            input(placeholder="Enter Username" name="username" id="username" required)
             br
 
             label Password
-            input(type='password' placeholder='Enter Password' required)
+            input(type='password' placeholder='Enter Password' name="password" id="password" required)
             br 
 
             input(type='submit')
