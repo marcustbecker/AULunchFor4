@@ -1,7 +1,7 @@
 extends layout.pug
 append head
     title Home
-    
+
 append content
     div(class='mynav')
         div(class='title')
@@ -22,20 +22,21 @@ append content
                     td= val.email
                     td member
         br
+
         div(class='heading')
             h3 Meeting Feedback
         br
         form(action='' method='post')
-            h5(style='text-align:center') Did your group meet?
+            h5(style='text-align:center') Did your group meet this month?
             div(class='rad-container')
                 div(class='rad-buttons')
                     input(class="rad" type="radio", name="meeting", value="1") 
                     | 
-                    a(class='rad-text') Yes
+                    a(class='rad-text') Yes, we did
                 div(class='rad-buttons')
                     input(class="rad" type="radio", name="meeting", value="0")
                     |
-                    a(class='rad-text') No
+                    a(class='rad-text') No, we did not
             hr
             div(class='comment-container')
                 h5 Comments:

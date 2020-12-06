@@ -18,7 +18,8 @@ append content
                 th Username
                 th Email
                 th Role
-                th DELETE
+                th Update
+                th Delete
             each val in userData
                 tr 
                     td= val.id
@@ -26,9 +27,15 @@ append content
                     td= val.userLogin
                     td= val.email
                     td member
+                    td
+                        form(action="/updateUser/"+val.id, method="get")
+                            input(type="submit")
                     td 
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
                             input(class='btn-blue' type="submit", value="Delete") 
         br
         button(class='btn-blue') Meeting info
+        br 
+        button 
+            a(href="departments") Go to departments
