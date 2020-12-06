@@ -1,7 +1,9 @@
 var express = require('express');
-var session = require('express-session');
+//var session = require('express-session');
 const { connect } = require('http2');
+const nodemailer = require('nodemailer');
 var app = express();
+const session = require('express-session')
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
 app.set( 'view engine', 'pug');
@@ -10,6 +12,7 @@ app.set('views', './views');
 var mysql = require("mysql");
 const { parse } = require('path');
 const { response } = require('express');
+const e = require('express');
 
 var con = mysql.createConnection({
     host: "45.55.136.114",
@@ -26,6 +29,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+
 
 con.connect(function(err) {
     if (err) throw err;
@@ -68,18 +72,22 @@ app.get('/home', function(req, res, next) {
     });
 });
 
-
+var username;
 // Login authentication 
 app.post('/login', function(req, res) {
-    var username = req.body.username;
+    username = req.session;
+    username.user = req.body.username;
     var password = req.body.password;
     var sql = 'SELECT * FROM Users WHERE userLogin = ? AND userPassw = ?'
     console.log("--- INSIDE /LOGIN POST ---")
+    //console.log("Brandon Test" + username.user)
+    var user = username.user
 
     // Checks if form was filled out
-    if (username && password) {
+    if (username.user && password) {
         //Checks if input matches database
-        con.query(sql, [username, password], function(err, data, fields) {
+        //console.log(username.user + "Hello this is brandon Test")
+        con.query(sql, [JSON.stringify(username.user), password], function(err, data, fields) {
             if (data.length > 0) {
                 req.session.loggedin = true;
                 req.session.username = username;
@@ -98,7 +106,11 @@ app.post('/login', function(req, res) {
 
 
 app.use(express.static('public'));
-
+app.get('/',function(req,res){
+    req.session.viewCount +=1;
+    console.log("hello" + req.session.viewCount);
+    res.render('index',{viewCount:req.session.viewCount})
+});
 app.get('/login', function(req, res){
     res.render('login')
 });
@@ -142,7 +154,32 @@ app.get('/admin', function(req, res, next) {
     });
 });
 
-//Helllo this is  a test
+function sendEmail(){
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth:{
+            user : 'aucompspartan@gmail.com',
+            pass : '!Baseball101',
+        }
+    })
+    let mailObject = {
+        from: 'brandonlangys@gmail.com',
+        to: 'brandonlangys@gmail.com',
+        subject: 'Testing',
+        Text : 'it works'
+    };
+
+    transporter.sendMail(mailObject, function(err, data){
+        if(err){
+            console.log('error')
+        }else{
+            console.log('email sent')
+        }
+    })
+}
+//sendEmail();
+
+
 
 
 app.listen(3000);
