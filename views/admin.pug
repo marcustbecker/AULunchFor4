@@ -1,36 +1,41 @@
 extends layout.pug
 append head
-    title Admin
-
+    title Admin Home
+    
 append content
+    div(class='mynav')
+        div(class='title')
+            h1 Admin Home
+        div(class='logout')
+            button(class='logout-btn') Logout
     div(class='container')
         div(class='heading')
-            h1 Admin Page
-        label Group Info:
+            h3 Group Info
         table(id='members')
-            tr
-                th ID
+            tr 
+                th id
                 th Name
+                th Username
                 th Email
                 th Role
                 th Update
                 th Delete
             each val in userData
-                tr
-                    td= val.id 
-                    td= val.firstN
+                tr 
+                    td= val.id
+                    td= val.firstN + " " + val.lastN
+                    td= val.userLogin
                     td= val.email
                     td member
                     td
                         form(action="/updateUser/"+val.id, method="get")
                             input(type="submit")
-                    td
-                        form(method="post" action="/deleteUser/" + val.id)
+                    td 
+                        form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
-                            input(type="submit", value="delete") 
+                            input(class='btn-blue' type="submit", value="Delete") 
         br
         button(class='btn-blue') Meeting info
         br 
         button 
             a(href="departments") Go to departments
-

@@ -38,7 +38,7 @@ app.post('/submit', function(req,res){
         if (err) throw err
         res.render('register', {title: 'Data Saved',
         message: 'The user was created successfully!'})
-
+        
     })
 });
 
@@ -54,13 +54,13 @@ app.post('/submitDep', function(req,res){
 
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
-
-   /* if(req.session.leggedin) {
+    /*
+    if(req.session.loggedin) {
         response.send('Welcome back, ' + req.session.username);
     } else {
         response.send('Please login to view this page!');
-    }*/
-    
+    }
+    */
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('home', {userData: data});
@@ -82,7 +82,13 @@ app.post('/login', function(req, res) {
             if (data.length > 0) {
                 req.session.loggedin = true;
                 req.session.username = username;
-                res.redirect('/preferences');
+                //this line needs to change to preferences
+                console.log(data[0].pref)
+                if (data[0].pref == undefined){
+                    res.redirect('/preferences');
+                } else {
+                    res.redirect('/home')
+                }
             } else {
                 res.send("Incorrect Username and/or Password");
             }
@@ -94,7 +100,13 @@ app.post('/login', function(req, res) {
     }
 });
 
-
+app.post('/deleteUser/:id', function (req, res) {
+    con.query("DELETE FROM `Users` WHERE `id`=?", [req.body.id], function (err, results, fields) {
+       if (err) throw err;
+       console.log("results = " + results)
+       res.redirect('/admin');
+    });
+});
 
 app.use(express.static('public'));
 
@@ -109,6 +121,7 @@ app.get('/register', function(req, res){
 app.get('/preferences', function(req, res){
     res.render('preferences')
 });
+
 
 app.get('/departments', function(req, res, next){
     var sql = 'SELECT * FROM Departments';
@@ -132,6 +145,7 @@ app.post('/deleteUser/:id', function (req, res) {
 
 app.get('/admin', function(req, res, next) {
     var sql='SELECT * FROM Users';
+
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('admin', {userData: data});
