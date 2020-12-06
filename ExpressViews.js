@@ -92,7 +92,13 @@ app.post('/login', function(req, res) {
     }
 });
 
-
+app.post('/deleteUser/:id', function (req, res) {
+    con.query("DELETE FROM `Users` WHERE `id`=?", [req.body.id], function (err, results, fields) {
+       if (err) throw err;
+       console.log("results = " + results)
+       res.redirect('/admin');
+    });
+});
 
 app.use(express.static('public'));
 
@@ -106,6 +112,15 @@ app.get('/register', function(req, res){
 
 app.get('/preferences', function(req, res){
     res.render('preferences')
+});
+
+app.get('/admin', function(req, res){
+    var sql='SELECT * FROM Users';
+
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('admin', {userData: data});
+    });
 });
 
 app.listen(3000);

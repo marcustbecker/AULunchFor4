@@ -1,0 +1,28 @@
+extends layout.pug
+append head
+    title Admin Home
+    
+append content
+    div(class='container')
+        div(class='heading')
+            h1 Home Page
+
+        label Group Info:
+        table(id='members')
+            tr 
+                th id
+                th Name
+                th Email
+                th Role
+            each val in userData
+                tr 
+                    td= val.id
+                    td= val.firstN
+                    td= val.email
+                    td member
+                    td 
+                        form(method="post" action="/deleteUser/" + val.id)
+                            input(type='hidden' name='id' value= val.id)
+                            input(type="submit", value="Delete") 
+        br
+        button(class='btn-blue') Meeting info
