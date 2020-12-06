@@ -6,7 +6,6 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
 app.set( 'view engine', 'pug');
 app.set('views', './views');
-var exec = require("child_process").exec;
 var mysql = require("mysql");
 const { parse } = require('path');
 const { response } = require('express');
@@ -123,13 +122,12 @@ app.get('/addDepartment', function(req, res){
     res.render('addDepartment')
 });
 
-app.post('/deleteUser', function(req, res){
-    console.log(req.body)
-    var sql = "DELETE from Users where  id= 'id'" ;
-    con.query(sql, function (err){
-        if(err) throw err
-        res.render('admin' ,{title: 'User Deleted', message: 'User was successfully deleted'});
-    })
+app.post('/deleteUser/:id', function (req, res) {
+    console.log(req.body);
+    con.query("DELETE FROM `Users` WHERE `id`=?", [req.body.id], function (err, results, fields) {
+       if (err) throw err;
+       res.end('User has been deleted!');
+    });
 });
 
 app.get('/admin', function(req, res, next) {
@@ -140,5 +138,27 @@ app.get('/admin', function(req, res, next) {
     });
 });
 
+/*app.get('/updateUser', function (req, res) {
+    console.log(req.body);
+    var sql = "UPDATE Users (id,firstN,lastN,email,userLogin,userPassw) VALUES(null, '" + req.body.firstN + "', '" + req.body.lastN + "','" + req.body.email + "','" + req.body.userLogin + "','" + req.body.userPassw + "')";
+    con.query('UPDATE `Users` SET `fistN`=?,`lastN`=?,`email`=?,`userLogin`=?,`userPassw`=? where `id`=?', [req.body.firstN, req.body.lastN, req.body.email, req.body.userLogin, req.body.userPassw, req.body.id], function (error, results, fields) {
+        con.query(sql, function (err) {
+            if (err) throw err
+            res.render('updateUser', {
+                title: 'Data Saved',
+                message: 'The user was created successfully!'
+            })
+        });
+ });;
+ });*/
+ app.get('/updateUser2/:id', function (req, res) {
+        con.query('UPDATE `Users` SET `fistN`=?,`lastN`=?,`email`=?,`userLogin`=?,`userPassw`=? where `id`=?', [req.body.id,req.body.firstN, req.body.lastN, req.body.email, req.body.userLogin, req.body.userPassw, req.body.id], function (error, results, fields) {
+            if (error) throw error;
+            res.end("User has been updated");
+          });
+      });
+ app.get('/updateUser/:id', function(req, res){
+    res.render('updateUser')
+});
 
 app.listen(3000);

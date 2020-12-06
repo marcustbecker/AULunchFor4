@@ -19,7 +19,17 @@ append content
                     td= val.email
                     td member
         br
-        button(class='btn-blue') Meeting info
+        h2 Did your group meet up this month?
+        
+        input(type="radio", value="1" name="meeting")
+        | Yes, we did
+        br
+        input(type="radio", value="0" name="meeting")
+        | No, we did not
+        br
+        h2 Comments:
+        input(type="text" placeholder="Enter Comments" name="comments")
+
         br 
         button 
             a(href="departments") Go to departments
