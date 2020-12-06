@@ -3,11 +3,14 @@ append head
     title Home
     
 append content
+    div(class='mynav')
+        div(class='title')
+            h1 Home
+        div(class='logout')
+            button(class='logout-btn') Logout
     div(class='container')
         div(class='heading')
-            h1 Home Page
-
-        label Group Info:
+            h3 Group Info
         table(id='members')
             tr 
                 th Name
@@ -19,4 +22,24 @@ append content
                     td= val.email
                     td member
         br
-        button(class='btn-blue') Meeting info
+        div(class='heading')
+            h3 Meeting Feedback
+        br
+        form(action='' method='post')
+            h5(style='text-align:center') Did your group meet?
+            div(class='rad-container')
+                div(class='rad-buttons')
+                    input(class="rad" type="radio", name="meeting", value="1") 
+                    | 
+                    a(class='rad-text') Yes
+                div(class='rad-buttons')
+                    input(class="rad" type="radio", name="meeting", value="0")
+                    |
+                    a(class='rad-text') No
+            hr
+            div(class='comment-container')
+                h5 Comments:
+                input(type="text")
+            center
+                br
+                input(class='btn-blue' type="submit")

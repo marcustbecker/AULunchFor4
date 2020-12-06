@@ -1,6 +1,27 @@
 .container {
   margin: 50 0 50 0;
 }
+.mynav {
+  background-color: #00467f;
+  padding: 10px 15%;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+.title {
+  margin-right: auto;
+}
+.logout-btn {
+  background-color: white;
+  color: black;
+  padding: 0.375rem 0.75rem;
+  margin: 10;
+  text-align: center;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  margin-left: auto;
+}
 .heading {
   background-color: #00467f;
   padding: 10 20;
@@ -14,7 +35,7 @@
 #members td,
 #members th {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 15px;
 }
 #members tr:nth-child(even) {
   background-color: #f2f2f2;
@@ -29,13 +50,42 @@
   background-color: #4983b3;
   color: white;
 }
+.del-form {
+  padding: 0;
+  margin: 0;
+}
 .btn-blue {
   background-color: #00467f;
   color: white;
   padding: 0.375rem 0.75rem;
   text-align: center;
   border: 1px solid transparent;
-  font-size: 1rem;
-  line-height: 1.5;
   border-radius: 0.25rem;
+}
+.rad-container {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.rad-buttons {
+  margin: 0 10;
+  padding: 10px;
+}
+.rad {
+  margin: 5px;
+  height: 15px;
+  width: 15px;
+}
+.rad-text {
+  font-size: 20px;
+}
+.comment-container {
+  width: 100%;
+  text-align: center;
+}
+.comment-container input {
+  width: 50%;
+  height: 100px;
 }
