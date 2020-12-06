@@ -123,8 +123,13 @@ app.get('/addDepartment', function(req, res){
     res.render('addDepartment')
 });
 
-app.get('/deleteUser', function(req, res){
-    exec("php deleteUser.php", function (error, stdout,stderr) {res.send(stdout);});
+app.post('/deleteUser', function(req, res){
+    console.log(req.body)
+    var sql = "DELETE from Users where  id= 'id'" ;
+    con.query(sql, function (err){
+        if(err) throw err
+        res.render('admin' ,{title: 'User Deleted', message: 'User was successfully deleted'});
+    })
 });
 
 app.get('/admin', function(req, res, next) {

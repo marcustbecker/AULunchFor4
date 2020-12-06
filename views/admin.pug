@@ -1,27 +1,25 @@
 extends layout.pug
 append head
-    title Admin
+    title Home
 
 append content
     div(class='container')
         div(class='heading')
-            h1 admin Page
-
+            h1 Home Page
         label Group Info:
         table(id='members')
             tr 
                 th Name
                 th Email
                 th Role
-                th Delete
             each val in userData
                 tr 
                     td= val.firstN
                     td= val.email
                     td member
-                    td <a href="deleteUser"> Delete User
         br
         button(class='btn-blue') Meeting info
-        
+        br 
         button 
             a(href="departments") Go to departments
+
