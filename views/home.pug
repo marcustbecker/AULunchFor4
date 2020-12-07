@@ -25,15 +25,15 @@ append content
         div(class='heading')
             h3 Meeting Feedback
         br
-        form(action='' method='post')
+        form(action='/comments' method='post')
             h5(style='text-align:center') Did your group meet this month?
             div(class='rad-container')
                 div(class='rad-buttons')
-                    input(class="rad" type="radio", name="meeting", value="1") 
+                    input(class="rad" type="radio", name="met", value="Yes") 
                     | 
                     a(class='rad-text') Yes, we did
                 div(class='rad-buttons')
-                    input(class="rad" type="radio", name="meeting", value="0")
+                    input(class="rad" type="radio", name="met", value="No")
                     |
                     a(class='rad-text') No, we did not
             hr
