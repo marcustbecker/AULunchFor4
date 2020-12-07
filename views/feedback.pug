@@ -7,10 +7,20 @@ append content
         div(class='title')
             h1 Feedback Info
         div(class='logout')
-            button(class='logout-btn') Logout
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout  
     div(class='container')
         div(class='heading')
             h3 Feedback Info
+        br
+        div(class='feedback-container')
+            div(class='feedback')
+                a Total number of groups who met: 
+                a=met
+            div(class='feedback')
+                a Total number of groups who did not meet: 
+                a=notMet
+        br
         table(id='members')
             tr 
                 th id
