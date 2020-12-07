@@ -26,13 +26,11 @@ append content
                 th id
                 th met
                 th comments
-                th groupID
             each val in feedback
                 tr 
                     td= val.id
                     td= val.met
                     td= val.comments
-                    td= val.groupID
         div(class='div-center')
             a(href="admin") 
                 button(class='btn-blue') Back to Admin

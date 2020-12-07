@@ -58,7 +58,7 @@ app.post('/submitDep', function(req,res){
 })
 
 app.get('/home', function(req, res) {
-    var sql='SELECT * FROM `Groups`';
+    var sql="SELECT * FROM `Groups` WHERE Leader='"+req.session.userId+"' OR Member2='"+req.session.userId+"' OR Member3='"+req.session.userId+"' OR Member4='"+req.session.userId+"'";
     con.query(sql, function (err, data) {
         if (err) throw err;
         if(data.length){
@@ -95,7 +95,6 @@ app.post('/login', function(req, res) {
                 req.session.isAdmin = results[0].isAdmin;
                 console.log("Logged in")
                 var sql2="SELECT * FROM `Users_Departments` WHERE `user_id`="+req.session.userId;
-                console.log("results===" + req.session.userId)
                 con.query(sql2, function(err, results2) {
                     if(req.session.isAdmin === 1){
                         res.redirect('/admin');
@@ -109,7 +108,7 @@ app.post('/login', function(req, res) {
                 })
                 
             }else{
-                res.render('login',{message : "Wrong Credentials"});
+                res.render('login',{errMessage : "Wrong Credentials"});
             }
         });
     } else {
@@ -250,16 +249,18 @@ function sendEmail(){
 app.post('/comments', function(req,res){
     console.log(req.body);
     //res.send(req.body.met);
-    var sql = "Insert into Feedback (id,met,comments) VALUES(null, '"+ req.body.met + "', '"+ req.body.comments + "')";
+    var sql = "UPDATE Groups SET met='"+req.body.met+"', comments='"+ req.body.comments+"' WHERE Leader="+req.session.userId;
     con.query(sql, function (err){
-        if (err) throw err
-        res.redirect("home");
-        
+        if (err){
+            res.redirect('home');
+        } else{
+            res.redirect('home');
+        }
     })
 });
 
 app.get('/feedback', auth, function(req, res, next) {
-    var sql='SELECT * FROM Feedback';
+    var sql='SELECT * FROM Groups';
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         var met = 0;
