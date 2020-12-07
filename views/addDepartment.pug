@@ -1,0 +1,23 @@
+extends layout.pug
+append head
+    title Add Departments
+
+append content
+    div(class='mynav')
+        div(class='title')
+            h1 Add Departments
+        div(class='logout')
+            button(class='logout-btn') Logout
+    div(class='container')
+        form(action = "submitDep" , method = "post")
+            label Department Name: 
+            input(type="text" placeholder="Enter Department Name" name="depName" id="depName" required)
+            br
+
+            label Department Description: 
+            input(type="text" placeholder="Enter Department Description" name="depDes" id="depDes" required)
+            br
+
+            button(class='btn-blue' type='submit') Add Department
+        a(href="departments") 
+            button(class='btn-blue') Back to Departments 

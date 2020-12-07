@@ -1,13 +1,14 @@
 extends layout.pug
 append head
-    title Register
+    title Update User
 append content
     div(class='container')
         div(class='heading')
-            h1 Register
+            h1 Update User
         hr
 
-        form(action="submit" method="post")
+        form(action="/updateUser/"+val.id, method="post")
+
             label First Name: 
             input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" required)
             br
@@ -32,7 +33,8 @@ append content
             input(type="password" placeholder="Repeat Password" required)
             br
 
-            button(type='submit') Create User
+            input(type='hidden' name='id' value=val.id)
+            input(type="submit",value="update")
 
-        div Go Back to Login
-        a(href="login") Login
+        div Go Back to Admin
+        a(href="admin") Admin
