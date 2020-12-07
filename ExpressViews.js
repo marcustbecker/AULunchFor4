@@ -66,29 +66,29 @@ app.get('/home', function(req, res, next) {
     });
 });
 
-var username;
+
 // Login authentication 
 app.post('/login', function(req, res) {
-    username = req.session;
-    username.user = req.body.username;
+    var username = req.body.username;
     var password = req.body.password;
     var sql = 'SELECT * FROM Users WHERE userLogin = ? AND userPassw = ?'
     console.log("--- INSIDE /LOGIN POST ---")
     //console.log("Brandon Test" + username.user)
-    var user = username.user
+    
 
     // Checks if form was filled out
-    if (username.user && password) {
+    if (username && password) {
         //Checks if input matches database
-        //console.log(username.user + "Hello this is brandon Test")
-        con.query(sql, [JSON.stringify(username.user), password], function(err, data, fields) {
-            res.redirect('/preferences');
-            if (data[0].pref == undefined){
+        con.query(sql, [username, password], function(err, data, fields) {
+            if (data.length > 0) {
+                req.session.loggedin = true;
+                req.session.username = username;
+                req.session.userID = data[0].id;
                 res.redirect('/preferences');
             } else {
-                res.redirect('/home')
-            }
-
+                res.send('Incorrect Username and/or Password!');
+            }           
+            res.end();
         });
     } else {
         res.send('Please enter Username and Password!');
@@ -119,11 +119,50 @@ app.get('/register', function(req, res){
 });
 
 app.get('/preferences', function(req, res){
-    res.render('preferences')
-    username = req.session;
-    console.log("Hello this is a test in register " + username.user)
+    var sql = 'SELECT * FROM Departments'; 
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('preferences', {departmentData: data});
+    });
+    username = req.session.username;
+    userID = req.session.userID;
+    console.log("Hello this is a test in login " + username);
+    console.log("Hello this is a test in login " + userID);
 });
 
+app.post('/updateDepGroup', function(req, res) {
+    userID = req.session.userID;
+    var departments = req.body;
+    console.log(departments);
+    console.log(departments.check);
+    
+    con.query("DELETE FROM `Users_Departments` WHERE `user_id`=?", [req.session.userID], function (err, data, fields) {
+        if (err) throw err;
+     });
+
+    for(i = 0; i < departments.check.length; i++) {
+        console.log(departments.check[i]);
+        var SQLin = "INSERT into Users_Departments (user_id, department_id) VALUES('" + userID + "', '" + departments.check[i] + "')";
+        con.query(SQLin, function (err, data, fields) {
+            if (err) throw err;
+        });
+    }
+    res.redirect('/preferences');
+});
+
+app.post('/formGroups', function(req, res) {
+    con.query("SELECT * FROM 'Users_Departments'", function (err, data, fields) {
+        if (err) throw err;
+    });
+});
+
+app.get('/groups', function(req, res){
+    var sql = "SELECT * FROM Groups";
+    con.query(sql, function (err, data){
+        if (err) throw err;
+        res.render('groups', {groupData: data})
+    })
+});
 
 app.get('/departments', function(req, res, next){
     var sql = 'SELECT * FROM Departments';

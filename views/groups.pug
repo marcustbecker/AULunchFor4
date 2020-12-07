@@ -1,0 +1,36 @@
+extends layout.pug
+append head
+    title Groups
+
+append content
+    div(class='mynav')
+        div(class='title')
+            h1 Groups
+        div(class='logout')
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout 
+    div(class='container')
+        div(class='heading')
+            h3 All Groups
+        br
+        table(id='members')
+            tr 
+                th ID
+                th meeting date
+                th Leader
+                th Member 2
+                th Member 3
+                th Member 4
+            each val in groupData
+                tr 
+                    td= val.id
+                    td= val.meeting_date
+                    td= val.Leader
+                    td= val.Member2
+                    td= val.Member3
+                    td= val.Member4
+        div(class='div-center')
+            a(href="admin") 
+                button(class='btn-blue') Back to Admin
+            a(href="formGroups")
+                button(class='btn-blue') Form Groups
