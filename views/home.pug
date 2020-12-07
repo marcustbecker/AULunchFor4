@@ -6,8 +6,8 @@ append content
     div(class='mynav')
         div(class='title')
             h1 Home
-        div(class='logout')
-            button(class='logout-btn') Logout
+        form(action="/logout" method="post")
+            button(class="logout-btn" type="submit") logout
     div(class='container')
         div(class='heading')
             h3 Group Info
@@ -29,17 +29,17 @@ append content
             h5(style='text-align:center') Did your group meet this month?
             div(class='rad-container')
                 div(class='rad-buttons')
-                    input(class="rad" type="radio", name="met", value="Yes") 
+                    input(class="rad" type="radio", name="met", value="Yes" required) 
                     | 
                     a(class='rad-text') Yes, we did
                 div(class='rad-buttons')
-                    input(class="rad" type="radio", name="met", value="No")
+                    input(class="rad" type="radio", name="met", value="No" required)
                     |
                     a(class='rad-text') No, we did not
             hr
             div(class='comment-container')
                 h5 Comments:
-                textarea(name='comments' id='comments' rows='5')
+                textarea(name='comments' id='comments' rows='5' required)
             center
                 br
                 input(class='btn-blue' type="submit")

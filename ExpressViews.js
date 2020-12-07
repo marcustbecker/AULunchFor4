@@ -83,11 +83,11 @@ app.post('/login', function(req, res) {
         //console.log(username.user + "Hello this is brandon Test")
         con.query(sql, [JSON.stringify(username.user), password], function(err, data, fields) {
             res.redirect('/preferences');
-            if (data[0].pref == undefined){
+            /*if (data[0].pref == undefined){
                 res.redirect('/preferences');
             } else {
                 res.redirect('/home')
-            }
+            }*/
 
         });
     } else {
@@ -204,5 +204,8 @@ app.get('/feedback', function(req, res, next) {
         res.render('feedback', {feedback: data});
     });
 });
-
+app.post('/logout', function(req, res, next) {
+    var sess = req.session.destroy();
+    res.redirect('login');
+});
 app.listen(3000);
