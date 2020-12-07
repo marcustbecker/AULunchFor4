@@ -10,6 +10,14 @@ append content
             form(action="/logout" method="post")
                 button(class="logout-btn" type="submit") logout
     div(class='container')
+        div(class='div-center')
+            a(href="feedback") 
+                button(class='btn-blue') Meeting Info
+            a(href="departments") 
+                button(class='btn-blue') Departments
+            a(href="groups")
+                button(class='btn-blue') Groups
+        br
         div(class='heading')
             h3 Users Info
         table(id='members')
@@ -31,11 +39,3 @@ append content
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
                             input(class='btn-blue' type="submit", value="Delete")
-
-        div(class='div-center')
-            a(href="feedback") 
-                button(class='btn-blue') Meeting Info
-            a(href="departments") 
-                button(class='btn-blue') Departments
-            a(href="groups")
-                button(class='btn-blue') Groups
