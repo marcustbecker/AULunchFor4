@@ -55,13 +55,7 @@ app.post('/submitDep', function(req,res){
 
 app.get('/home', function(req, res, next) {
     var sql='SELECT * FROM Users';
-    /*
-    if(req.session.loggedin) {
-        response.send('Welcome back, ' + req.session.username);
-    } else {
-        response.send('Please login to view this page!');
-    }
-    */
+    
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('home', {userData: data});
@@ -165,15 +159,16 @@ app.get('/admin', function(req, res, next) {
         });
  });;
  });*/
- app.get('/updateUser2/:id', function (req, res) {
-        con.query('UPDATE `Users` SET `fistN`=?,`lastN`=?,`email`=?,`userLogin`=?,`userPassw`=? where `id`=?', [req.body.id,req.body.firstN, req.body.lastN, req.body.email, req.body.userLogin, req.body.userPassw, req.body.id], function (error, results, fields) {
-            if (error) throw error;
-            res.end("User has been updated");
-          });
-      });
- app.get('/updateUser/:id', function(req, res){
+app.get('/updateUser2/:id', function (req, res) {
+    con.query('UPDATE `Users` SET `fistN`=?,`lastN`=?,`email`=?,`userLogin`=?,`userPassw`=? where `id`=?', [req.body.id,req.body.firstN, req.body.lastN, req.body.email, req.body.userLogin, req.body.userPassw, req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        res.end("User has been updated");
+    });
+});
+app.get('/updateUser/:id', function(req, res){
     res.render('updateUser')
 });
+
 app.post('/comments', function(req,res){
     console.log(req.body);
     //res.send(req.body.met);
@@ -184,6 +179,7 @@ app.post('/comments', function(req,res){
         
     })
 });
+
 app.get('/feedback', function(req, res, next) {
     var sql='SELECT * FROM Feedback';
     con.query(sql, function (err, data, fields) {
@@ -191,4 +187,5 @@ app.get('/feedback', function(req, res, next) {
         res.render('feedback', {feedback: data});
     });
 });
+
 app.listen(3000);

@@ -28,17 +28,15 @@ append content
                     td= val.email
                     td member
                     td
-                        form(action="/updateUser/"+val.id, method="get")
-                            input(type="submit")
+                        form(class='del-form' action="/updateUser/"+val.id, method="get")
+                            input(class='btn-blue' type="submit", value="Update")
                     td 
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
                             input(class='btn-blue' type="submit", value="Delete")
-        br
+
         div(class='div-center')
             a(href="feedback") 
-                button(class='btn-blue') Group Feedback
-        br 
-        div(class='div-center')
+                button(class='btn-blue') Meeting Info
             a(href="departments") 
                 button(class='btn-blue') Go to Departments
