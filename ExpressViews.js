@@ -152,28 +152,50 @@ app.get('/register', function(req, res){
     res.render('register')
 });
 
-app.post('/updateDepartment', function(req,res){
-    console.log(req.body.check)
-    var sql = "INSERT into Users_Departments (user_id, department_id) VALUES('" + req.session.userId + "', '" + req.body.check + "')"
-    con.query(sql, function (err, data, fields) {
-        if (err) throw err;
-        res.redirect('home');
-    });
-})
-
 app.get('/preferences', function(req, res){
     var sql = 'SELECT * FROM Departments'; 
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('preferences', {departmentData: data});
     });
-    var username = req.session.userLogin;
-    var userID = req.session.userId;
+    username = req.session.username;
+    userID = req.session.userID;
     console.log("Hello this is a test in login " + username);
     console.log("Hello this is a test in login " + userID);
 });
+app.post('/updateDepartment', function(req, res) {
+    userID = req.session.userId;
+    var departments = req.body;
+    
+    con.query("DELETE FROM `Users_Departments` WHERE `user_id`=?", [req.session.userId], function (err, data, fields) {
+        if (err) throw err;
+     });
+
+    for(i = 0; i < departments.check.length; i++) {
+        console.log(departments.check[i]);
+        var SQLin = "INSERT into Users_Departments (user_id, department_id) VALUES('" + userID + "', '" + departments.check[i] + "')";
+        con.query(SQLin, function (err, data, fields) {
+            if (err) throw err;
+        });
+    }
+    res.redirect('/preferences');
+});
+app.post('/formGroups', function(req, res) {
+    con.query("SELECT * FROM 'Users_Departments'", function (err, data, fields) {
+        if (err) throw err;
+    });
+});
+
+app.get('/groups', function(req, res){
+    var sql = "SELECT * FROM Groups";
+    con.query(sql, function (err, data){
+        if (err) throw err;
+        res.render('groups', {groupData: data})
+    })
+});
 
 app.get('/departments', auth, function(req, res, next){
+
     var sql = 'SELECT * FROM Departments';
     con.query(sql, function(err,data, fields){
         if(err) throw err;
@@ -252,14 +274,6 @@ app.get('/feedback', auth, function(req, res, next) {
         }
         res.render('feedback', {feedback: data, met: met, notMet: notMet});
     });
-});
-
-app.get('/groups', auth, function(req, res){
-    var sql = "SELECT * FROM Groups";
-    con.query(sql, function (err, data){
-        if (err) throw err;
-        res.render('groups', {groupData: data})
-    })
 });
 
 app.listen(3000);

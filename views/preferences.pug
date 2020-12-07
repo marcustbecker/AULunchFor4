@@ -10,7 +10,7 @@ append content
         br
         form(action="updateDepartment" method="post")
             for val in departmentData
-                input(id='check' name='check' type='radio' value= val.id)
+                input(id='check' name='check' type='checkbox' value= val.id)
                 label(for= val.depName)= val.depName
                 br
             input(type='submit')
