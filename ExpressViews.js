@@ -36,21 +36,23 @@ con.connect(function(err) {
     console.log('Database is connected successfully!');
 });
 
-app.post('/submit', function(req,res){
+app.post('/registerUser', function(req,res){
     console.log(req.body);
-    var sql = "Insert into Users (id,firstN,lastN,email,userLogin,userPassw) VALUES(null, '"+ req.body.firstN + "', '"+ req.body.lastN + "','"+ req.body.email + "','"+ req.body.userLogin + "','"+ req.body.userPassw + "')";
+    var sql = 'SELECT * FROM Departments'; 
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('register', {departmentData: data});
+    });
+    var sql = "Insert into Users (id,firstN,lastN,email,userLogin,userPassw,department,isActive) VALUES(null, '"+ req.body.firstN + "', '"+ req.body.lastN + "','"+ req.body.email + "','"+ req.body.userLogin + "','"+ req.body.userPassw + "','" + req.body.department + "','Yes')";
     con.query(sql, function (err){
         if (err) throw err
-        res.render('register', {title: 'Data Saved',
-        message: 'The user was created successfully!'})
-        
     })
 });
 
 app.post('/submitDep', function(req,res){
     console.log(req.body)
     
-    var sql = "Insert into Departments (id,depName,depDes) VALUES(null, '"+ req.body.depName + "', '" + parseInt(req.body.depDes) + "')";
+    var sql = "Insert into Departments (id,depName,depDes) VALUES(null, '"+ req.body.depName + "', '" + req.body.depDes + "')";
     con.query(sql, function (err){
         if(err) throw err
         res.render('addDepartment' ,{title: 'Data Saved', message: 'Department Created'});
@@ -67,6 +69,8 @@ app.get('/home', function(req, res) {
             var mem2 = data[0].Member2;
             var mem3 = data[0].Member3;
             var mem4 = data[0].Member4;
+        }else{
+            res.send("Waiting for group to be made...");
         }
         var sql2="SELECT * FROM Users WHERE id="+leader+" OR id='"+mem2+"' OR id='"+mem3+"' OR id='"+mem4+"'";
         con.query(sql2, function (err, data2) {
@@ -79,8 +83,6 @@ app.get('/home', function(req, res) {
 // Login authentication 
 app.post('/login', function(req, res) {
     var sess = req.session
-    //username = req.session;
-    //UserId = req.session;
     var username = req.body.username;
     var password = req.body.password;
     var sql="SELECT id, firstN, lastN, userLogin, email, isAdmin FROM `Users` WHERE `userLogin`='"+username+"' and userPassw ='"+password+"'";
@@ -130,7 +132,7 @@ app.post('/logout', function(req, res, next) {
 });
 
 app.post('/deleteUser/:id', function (req, res) {
-    con.query("DELETE FROM `Users` WHERE `id`=?", [req.body.id], function (err, results, fields) {
+    con.query("DELETE FROM Users WHERE id=?", [req.body.id], function (err, results, fields) {
        if (err) throw err;
        console.log("results = " + results)
        res.redirect('/admin');
@@ -138,17 +140,17 @@ app.post('/deleteUser/:id', function (req, res) {
 });
 
 app.use(express.static('public'));
-app.get('/',function(req,res){
-    req.session.viewCount +=1;
-    console.log("hello" + req.session.viewCount);
-    res.render('index',{viewCount:req.session.viewCount})
-});
+
 app.get('/login', function(req, res){
     res.render('login')
 });
 
 app.get('/register', function(req, res){
-    res.render('register')
+    var sql = 'SELECT * FROM Departments';
+    con.query(sql, function(err,data, fields){
+        if(err) throw err;
+        res.render('register',{departmentData:data})
+    })
 });
 
 app.get('/preferences', function(req, res){
@@ -162,6 +164,7 @@ app.get('/preferences', function(req, res){
     console.log("Hello this is a test in login " + username);
     console.log("Hello this is a test in login " + userID);
 });
+
 app.post('/updateDepartment', function(req, res) {
     userID = req.session.userId;
     var departments = req.body;
@@ -177,8 +180,9 @@ app.post('/updateDepartment', function(req, res) {
             if (err) throw err;
         });
     }
-    res.redirect('/preferences');
+    res.redirect('/home');
 });
+
 app.post('/formGroups', function(req, res) {
     con.query("SELECT * FROM 'Users_Departments'", function (err, data, fields) {
         if (err) throw err;
@@ -222,34 +226,53 @@ app.get('/admin', auth, function(req, res, next) {
     });
 });
 
-function sendEmail(){
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth:{
-            user : 'aucompspartan@gmail.com',
-            pass : '!Baseball101',
-        }
-    })
-    let mailObject = {
-        from: 'brandonlangys@gmail.com',
-        to: 'brandonlangys@gmail.com',
-        subject: 'Testing',
-        Text : 'it works'
-    };
+app.get('/sendEmail', function(req,res){
+    con.query("SELECT * from Users WHERE isActive='Yes'", function(err, data, fields) {
 
-    transporter.sendMail(mailObject, function(err, data){
-        if(err){
-            console.log('error')
-        }else{
-            console.log('email sent')
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth:{
+                user : 'aucompspartan@gmail.com',
+                pass : '!Baseball101',
+            }
+        })
+        var arr = [];
+        for(var val in data){
+            arr.push(data[val].email);
         }
-    })
-}
+        let mailOptions = {
+            from: 'brandonlangys@gmail.com',
+            to: arr,
+            subject: 'Reminder that Lunch for 4 Meeting is coming up!',
+            text : 'Get your groups in and stay active!'
+        };
+
+        transporter.sendMail(mailOptions, function(err, data){
+            if(err){
+                console.log('error')
+            }else{
+                console.log('email sent')
+            }
+        });
+    });
+});
 
 app.post('/comments', function(req,res){
     console.log(req.body);
     //res.send(req.body.met);
     var sql = "UPDATE Groups SET met='"+req.body.met+"', comments='"+ req.body.comments+"' WHERE Leader="+req.session.userId;
+    con.query(sql, function (err){
+        if (err){
+            res.redirect('home');
+        } else{
+            res.redirect('home');
+        }
+    })
+});
+
+app.post('/isActive', function(req,res){
+    console.log(req.body.isActive);
+    var sql = "UPDATE Users SET isActive='"+req.body.isActive+"' WHERE id="+req.session.userId;
     con.query(sql, function (err){
         if (err){
             res.redirect('home');
