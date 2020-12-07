@@ -1,27 +1,26 @@
+extends layout.pug
+append head
+    title Departments
 
-html
-    head
-        title Departments
-    body
-        h1 Departments
-
-
-        table(border='1px solid black')
+append content
+    div(class='mynav')
+        div(class='title')
+            h1 Departments
+        div(class='logout')
+            button(class='logout-btn') Logout
+    div(class='container')
+        table(id='members')
             tr
                 th ID
                 th Department Name
-                th Department Densitiy
+                th Department Description
             each val in departmentData
                 tr
                     td= val.id
                     td= val.depName
-                    td= depDes
-
-        br
-
-        button  
-            a(href="addDepartments") Add a Department
-        br
-        br
-        button  
-            a(href="home") Go to Home
+                    td= val.depDes
+        div(class='div-center')
+            a(href="addDepartment") 
+                button(class='btn-blue') Add a Department
+            a(href="admin") 
+                button(class='btn-blue') Back to Admin Home
