@@ -88,14 +88,7 @@ app.post('/login', function(req, res) {
         //Checks if input matches database
         //console.log(username.user + "Hello this is brandon Test")
         con.query(sql, [JSON.stringify(username.user), password], function(err, data, fields) {
-            if (data.length > 0) {
-                req.session.loggedin = true;
-                req.session.username = username;
-                res.redirect('/preferences');
-            } else {
-                res.send("Incorrect Username and/or Password");
-            }
-            res.end();
+            res.redirect('/preferences');
         });
     } else {
         res.send('Please enter Username and Password!');
