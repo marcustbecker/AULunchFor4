@@ -7,10 +7,11 @@ append content
         div(class='title')
             h1 Admin Home
         div(class='logout')
-            button(class='logout-btn') Logout
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout
     div(class='container')
         div(class='heading')
-            h3 Group Info
+            h3 Users Info
         table(id='members')
             tr 
                 th id
@@ -18,7 +19,6 @@ append content
                 th Username
                 th Email
                 th Role
-                th Update
                 th Delete
             each val in userData
                 tr 
@@ -27,9 +27,6 @@ append content
                     td= val.userLogin
                     td= val.email
                     td member
-                    td
-                        form(class='del-form' action="/updateUser/"+val.id, method="get")
-                            input(class='btn-blue' type="submit", value="Update")
                     td 
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
@@ -39,4 +36,6 @@ append content
             a(href="feedback") 
                 button(class='btn-blue') Meeting Info
             a(href="departments") 
-                button(class='btn-blue') Go to Departments
+                button(class='btn-blue') Departments
+            a(href="groups")
+                button(class='btn-blue') Groups
