@@ -33,9 +33,12 @@ append content
                     td 
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
-                            input(class='btn-blue' type="submit", value="Delete") 
+                            input(class='btn-blue' type="submit", value="Delete")
         br
-        button(class='btn-blue') Meeting info
+        div(class='div-center')
+            a(href="feedback") 
+                button(class='btn-blue') Group Feedback
         br 
-        button 
-            a(href="departments") Go to departments
+        div(class='div-center')
+            a(href="departments") 
+                button(class='btn-blue') Go to Departments

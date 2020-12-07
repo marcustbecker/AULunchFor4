@@ -14,7 +14,8 @@ var con = mysql.createConnection({
     host: "45.55.136.114",
     user: "PWW_F202",
     password: "csc4350Time",
-    database: "PWW_F202"
+    database: "PWW_F202",
+    multipleStatements: true
 });
 
 /* --- Session for user login --- */ 
@@ -145,7 +146,6 @@ app.post('/deleteUser/:id', function (req, res) {
 
 app.get('/admin', function(req, res, next) {
     var sql='SELECT * FROM Users';
-
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
         res.render('admin', {userData: data});
@@ -174,5 +174,21 @@ app.get('/admin', function(req, res, next) {
  app.get('/updateUser/:id', function(req, res){
     res.render('updateUser')
 });
-
+app.post('/comments', function(req,res){
+    console.log(req.body);
+    //res.send(req.body.met);
+    var sql = "Insert into Feedback (id,met,comments) VALUES(null, '"+ req.body.met + "', '"+ req.body.comments + "')";
+    con.query(sql, function (err){
+        if (err) throw err
+        res.redirect("home");
+        
+    })
+});
+app.get('/feedback', function(req, res, next) {
+    var sql='SELECT * FROM Feedback';
+    con.query(sql, function (err, data, fields) {
+        if (err) throw err;
+        res.render('feedback', {feedback: data});
+    });
+});
 app.listen(3000);

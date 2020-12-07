@@ -85,7 +85,7 @@
   width: 100%;
   text-align: center;
 }
-.comment-container input {
+.comment-container textarea {
   width: 50%;
   height: 100px;
 }
