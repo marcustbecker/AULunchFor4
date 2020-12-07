@@ -7,7 +7,8 @@ append content
         div(class='title')
             h1 Home
         div(class='logout')
-            button(class='logout-btn') Logout
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout    
     div(class='container')
         div(class='heading')
             h3 Group Info
@@ -18,7 +19,7 @@ append content
                 th Role
             each val in userData
                 tr 
-                    td= val.firstN
+                    td= val.firstN + " " + val.lastN
                     td= val.email
                     td member
         br

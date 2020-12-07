@@ -57,43 +57,77 @@ app.post('/submitDep', function(req,res){
     })
 })
 
-app.get('/home', function(req, res, next) {
-
-    var sql='SELECT * FROM Users';
-    con.query(sql, function (err, data, fields) {
+app.get('/home', function(req, res) {
+    var sql='SELECT * FROM `Groups`';
+    con.query(sql, function (err, data) {
         if (err) throw err;
-        res.render('home', {userData: data});
+        if(data.length){
+            var groupId = data[0].id;
+            var leader = data[0].Leader;
+            var mem2 = data[0].Member2;
+            var mem3 = data[0].Member3;
+            var mem4 = data[0].Member4;
+        }
+        var sql2="SELECT * FROM Users WHERE id="+leader+" OR id='"+mem2+"' OR id='"+mem3+"' OR id='"+mem4+"'";
+        con.query(sql2, function (err, data2) {
+            res.render('home', {userData: data2});
+        });
     });
+    
 });
-
 
 // Login authentication 
 app.post('/login', function(req, res) {
+    var sess = req.session
+    //username = req.session;
+    //UserId = req.session;
     var username = req.body.username;
     var password = req.body.password;
-    var sql = 'SELECT * FROM Users WHERE userLogin = ? AND userPassw = ?'
-    console.log("--- INSIDE /LOGIN POST ---")
-    //console.log("Brandon Test" + username.user)
-    
-
-    // Checks if form was filled out
+    var sql="SELECT id, firstN, lastN, userLogin, email, isAdmin FROM `Users` WHERE `userLogin`='"+username+"' and userPassw ='"+password+"'";
     if (username && password) {
-        //Checks if input matches database
-        con.query(sql, [username, password], function(err, data, fields) {
-            if (data.length > 0) {
-                req.session.loggedin = true;
-                req.session.username = username;
-                req.session.userID = data[0].id;
-                res.redirect('/preferences');
-            } else {
-                res.send('Incorrect Username and/or Password!');
-            }           
-            res.end();
+        con.query(sql, function(err, results) {
+            if(results.length){
+                req.session.userId = results[0].id;
+                req.session.firstName = results[0].firstN;
+                req.session.lastName = results[0].lastN;
+                req.session.userLogin = results[0].userLogin;
+                req.session.email = results[0].email;
+                req.session.isAdmin = results[0].isAdmin;
+                console.log("Logged in")
+                var sql2="SELECT * FROM `Users_Departments` WHERE `user_id`="+req.session.userId;
+                console.log("results===" + req.session.userId)
+                con.query(sql2, function(err, results2) {
+                    if(req.session.isAdmin === 1){
+                        res.redirect('/admin');
+                    } else if (req.session.isAdmin === 0){
+                        if(results2.length){
+                            res.redirect('/home')
+                        }else{
+                            res.redirect('/preferences')
+                        }
+                    }
+                })
+                
+            }else{
+                res.render('login',{message : "Wrong Credentials"});
+            }
         });
     } else {
         res.send('Please enter Username and Password!');
         res.end();
     }
+});
+
+var auth = function(req, res, next) {
+    if (req.session.isAdmin)
+        return next();
+    else
+        return res.sendStatus(401);
+};
+
+app.post('/logout', function(req, res, next) {
+    var sess = req.session.destroy();
+    res.redirect('login');
 });
 
 app.post('/deleteUser/:id', function (req, res) {
@@ -129,14 +163,11 @@ app.get('/preferences', function(req, res){
     console.log("Hello this is a test in login " + username);
     console.log("Hello this is a test in login " + userID);
 });
-
-app.post('/updateDepGroup', function(req, res) {
-    userID = req.session.userID;
+app.post('/updateDepartment', function(req, res) {
+    userID = req.session.userId;
     var departments = req.body;
-    console.log(departments);
-    console.log(departments.check);
     
-    con.query("DELETE FROM `Users_Departments` WHERE `user_id`=?", [req.session.userID], function (err, data, fields) {
+    con.query("DELETE FROM `Users_Departments` WHERE `user_id`=?", [req.session.userId], function (err, data, fields) {
         if (err) throw err;
      });
 
@@ -149,7 +180,6 @@ app.post('/updateDepGroup', function(req, res) {
     }
     res.redirect('/preferences');
 });
-
 app.post('/formGroups', function(req, res) {
     con.query("SELECT * FROM 'Users_Departments'", function (err, data, fields) {
         if (err) throw err;
@@ -164,7 +194,8 @@ app.get('/groups', function(req, res){
     })
 });
 
-app.get('/departments', function(req, res, next){
+app.get('/departments', auth, function(req, res, next){
+
     var sql = 'SELECT * FROM Departments';
     con.query(sql, function(err,data, fields){
         if(err) throw err;
@@ -172,7 +203,7 @@ app.get('/departments', function(req, res, next){
     })
 });
 
-app.get('/addDepartment', function(req, res){
+app.get('/addDepartment', auth, function(req, res){
     res.render('addDepartment')
 });
 
@@ -184,7 +215,7 @@ app.post('/deleteUser/:id', function (req, res) {
     });
 });
 
-app.get('/admin', function(req, res, next) {
+app.get('/admin', auth, function(req, res, next) {
     var sql='SELECT * FROM Users';
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
@@ -215,15 +246,6 @@ function sendEmail(){
         }
     })
 }
-app.get('/updateUser2/:id', function (req, res) {
-    con.query('UPDATE `Users` SET `fistN`=?,`lastN`=?,`email`=?,`userLogin`=?,`userPassw`=? where `id`=?', [req.body.id,req.body.firstN, req.body.lastN, req.body.email, req.body.userLogin, req.body.userPassw, req.body.id], function (error, results, fields) {
-        if (error) throw error;
-        res.end("User has been updated");
-    });
-});
-app.get('/updateUser/:id', function(req, res){
-    res.render('updateUser')
-});
 
 app.post('/comments', function(req,res){
     console.log(req.body);
@@ -236,11 +258,21 @@ app.post('/comments', function(req,res){
     })
 });
 
-app.get('/feedback', function(req, res, next) {
+app.get('/feedback', auth, function(req, res, next) {
     var sql='SELECT * FROM Feedback';
     con.query(sql, function (err, data, fields) {
         if (err) throw err;
-        res.render('feedback', {feedback: data});
+        var met = 0;
+        var notMet = 0;
+        for( var val in data){
+            if(data[val].met == 'Yes'){
+                met++;
+            }
+            else if(data[val].met == 'No'){
+                notMet++;
+            }
+        }
+        res.render('feedback', {feedback: data, met: met, notMet: notMet});
     });
 });
 

@@ -8,7 +8,7 @@ append content
         h3 Select the departments you are willing to meet with:
         
         br
-        form(action="updateDepGroup" method="post")
+        form(action="updateDepartment" method="post")
             for val in departmentData
                 input(id='check' name='check' type='checkbox' value= val.id)
                 label(for= val.depName)= val.depName
