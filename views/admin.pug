@@ -29,12 +29,13 @@ append content
                     td member
                     td
                         form(class='del-form' action="/updateUser/"+val.id, method="get")
-                            input(class='btn-blue' type="submit")
+                            input(class='btn-blue' type="submit", value="Update")
                     td 
                         form(class='del-form' method="post" action="/deleteUser/" + val.id)
                             input(type='hidden' name='id' value= val.id)
-                            input(class='btn-blue' type="submit", value="Delete") 
+                            input(class='btn-blue' type="submit", value="Delete")
         div(class='div-center')
-            button(class='btn-blue') Meeting Info
+            a(href="feedback") 
+                button(class='btn-blue') Meeting Info
             a(href="departments") 
                 button(class='btn-blue') Go to Departments
