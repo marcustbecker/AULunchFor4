@@ -6,8 +6,8 @@ append content
     div(class='mynav')
         div(class='title')
             h1 Departments
-        div(class='logout')
-            button(class='logout-btn') Logout
+        form(action="/logout" method="post")
+            button(class="logout-btn" type="submit") logout
     div(class='container')
         table(id='members')
             tr

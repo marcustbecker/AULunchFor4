@@ -299,5 +299,8 @@ app.get('/feedback', auth, function(req, res, next) {
         res.render('feedback', {feedback: data, met: met, notMet: notMet});
     });
 });
-
+app.post('/logout', function(req, res, next) {
+    var sess = req.session.destroy();
+    res.redirect('login');
+});
 app.listen(3000);

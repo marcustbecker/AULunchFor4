@@ -27,12 +27,10 @@ append content
             label Password: 
             input(type='password' placeholder='Enter Password' name="userPassw" id="userPassw" required)
             br
-
             label Department:
             select(name="department" id='department' required)
                 each val in departmentData            
                     option(value=val.depName)= val.depName
-                    
             button(type='submit') Create User
 
         div Go Back to Login
