@@ -6,6 +6,7 @@ append content
         div(class='heading')
             h1 Login
         br
+        h3(style="color:red")=errMessage
         form(action="login" method="post")
             label Username:  
             input(placeholder="Enter Username" name="username" id="username" required)

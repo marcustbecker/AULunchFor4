@@ -7,7 +7,7 @@ append content
             h1 Register
         hr
 
-        form(action="submit" method="post")
+        form(action="registerUser" method="post")
             label First Name: 
             input(type="text" placeholder="Enter First Name" name="firstN" id="firstN" required)
             br
@@ -27,11 +27,10 @@ append content
             label Password: 
             input(type='password' placeholder='Enter Password' name="userPassw" id="userPassw" required)
             br
-
-            label(for="psw-repeat") Confirm Password: 
-            input(type="password" placeholder="Repeat Password" name="comPassw" id="comPassw" required)
-            br
-
+            label Department:
+            select(name="department" id='department' required)
+                each val in departmentData            
+                    option(value=val.depName)= val.depName
             button(type='submit') Create User
 
         div Go Back to Login

@@ -6,23 +6,31 @@ append content
     div(class='mynav')
         div(class='title')
             h1 Feedback Info
-        form(action="/logout" method="post")
-            button(class="logout-btn" type="submit") logout
+        div(class='logout')
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout  
     div(class='container')
         div(class='heading')
             h3 Feedback Info
+        br
+        div(class='feedback-container')
+            div(class='feedback')
+                a Total number of groups who met: 
+                a=met
+            div(class='feedback')
+                a Total number of groups who did not meet: 
+                a=notMet
+        br
         table(id='members')
             tr 
                 th id
                 th met
                 th comments
-                th groupID
             each val in feedback
                 tr 
                     td= val.id
                     td= val.met
                     td= val.comments
-                    td= val.groupID
         div(class='div-center')
             a(href="admin") 
                 button(class='btn-blue') Back to Admin

@@ -5,9 +5,10 @@ append head
 append content
     div(class='mynav')
         div(class='title')
-            h1 Home
-        form(action="/logout" method="post")
-            button(class="logout-btn" type="submit") logout
+            h1 Home=
+        div(class='logout')
+            form(action="/logout" method="post")
+                button(class="logout-btn" type="submit") logout   
     div(class='container')
         div(class='heading')
             h3 Group Info
@@ -16,11 +17,16 @@ append content
                 th Name
                 th Email
                 th Role
+                th Status
             each val in userData
                 tr 
-                    td= val.firstN
+                    td= val.firstN + " " + val.lastN
                     td= val.email
                     td member
+                    if val.isActive === 'Yes'
+                        td="Active"
+                    else if val.isActive === 'No'
+                        td="Inactive"
         br
         div(class='heading')
             h3 Meeting Feedback
@@ -43,3 +49,27 @@ append content
             center
                 br
                 input(class='btn-blue' type="submit")
+                h3=errMessage
+        div(class='heading')
+            h3 Status
+        form(action='isActive' method='post')
+            br
+            h5(style='text-align:center') Change your online status:
+            div(class='rad-container')
+                div(class='rad-buttons')
+                    input(class="rad" type="radio", name="isActive", value='Yes') 
+                    | 
+                    a(class='rad-text') Active
+                div(class='rad-buttons')
+                    input(class="rad" type="radio", name="isActive", value='No')
+                    |
+                    a(class='rad-text') Inactive
+            center
+                br
+                input(class='btn-blue' type="submit")
+        div(class='heading')
+            h3 Preferences
+        center 
+            p Change Department Preferences:
+            a(href="preferences")
+                button(class='btn-blue') Preferences

@@ -5,28 +5,13 @@ append content
     div(class='container')
         div(class='heading')
             h1 Preferences
+        h1=waiting
         h3 Select the departments you are willing to meet with:
         
         br
-        form(action="")
-            input(type='checkbox' value='math')
-            label(for='math') Math
-            br
-
-            input(type='checkbox' value='science')
-            label(for='science') Science
-            br
-
-            input(type='checkbox' value='business')
-            label(for='business') Business
-            br
-
-            input(type='checkbox' value='nursing')
-            label(for='nursing') Nursing
-            br
-
-            input(type='checkbox' value='education')
-            label(for='education') Education
-            br
-
+        form(action="updateDepartment" method="post")
+            for val in departmentData
+                input(id='check' name='check' type='checkbox' value= val.id)
+                label(for= val.depName)= val.depName
+                br
             input(type='submit')
